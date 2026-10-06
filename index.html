@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar de Concursos — Editais abertos e previstos</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff7a00'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'%3E%3Ccircle cx='32' cy='32' r='20'/%3E%3Ccircle cx='32' cy='32' r='9'/%3E%3Cline x1='32' y1='32' x2='47' y2='17'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="alternate icon" type="image/x-icon" href="radar_concursos.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy-950: #071a30; --navy-900: #0b2545; --navy-800: #13315c; --navy-600: #1d4e89;
+      --blue-500: #2b7bd6; --blue-100: #e3efff;
+      --orange: #ff7a00; --orange-dark: #e06400; --orange-100: #fff1e3;
+      --green: #12a150; --green-100: #e2f7ea;
+      --amber: #c98a00; --amber-100: #fff6d6;
+      --red: #d92d3a; --red-100: #ffe6e8;
+      --violet: #6b46c1; --violet-100: #efe9ff;
+      --surface: #f2f5f9; --card: #ffffff; --text: #10213a; --text-sub: #5b6b82;
+      --border: #dde5ef; --radius: 14px; --shadow: 0 2px 10px rgba(11,37,69,.07);
+      --shadow-lg: 0 14px 34px rgba(11,37,69,.16);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--surface); color: var(--text); min-height: 100vh; font-size: 14px; }
+    a { color: inherit; }
+    button, select, input { font-family: inherit; }
+
+    /* ---------- Topo ---------- */
+    .topbar { background: var(--navy-950); color: rgba(255,255,255,.7); font-size: 12px; }
+    .topbar .wrap { display: flex; justify-content: space-between; align-items: center; height: 32px; gap: 12px; }
+    .topbar b { color: #fff; font-weight: 600; }
+    .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2ee07a; margin-right: 6px; box-shadow: 0 0 0 3px rgba(46,224,122,.2); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header.main { background: var(--navy-900); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+    header.main .wrap { display: flex; align-items: center; height: 64px; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 10px; background: var(--orange); display: grid; place-items: center; }
+    .brand-mark svg { width: 22px; height: 22px; stroke: #fff; }
+    .brand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: #fff; letter-spacing: -.3px; }
+    .brand-name span { color: var(--orange); }
+    nav.menu { display: flex; gap: 4px; margin-left: auto; }
+    nav.menu a { color: rgba(255,255,255,.78); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 8px 12px; border-radius: 8px; }
+    nav.menu a:hover { background: rgba(255,255,255,.08); color: #fff; }
+    nav.menu a.cta { background: var(--orange); color: #fff; font-weight: 600; }
+    nav.menu a.cta:hover { background: var(--orange-dark); }
+
+    /* ---------- Hero ---------- */
+    .hero { background: radial-gradient(1200px 400px at 85% -10%, rgba(255,122,0,.22), transparent 60%), linear-gradient(160deg, var(--navy-900), var(--navy-800) 55%, var(--navy-600)); color: #fff; padding: 44px 0 88px; }
+    .hero h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(26px, 4.2vw, 40px); font-weight: 800; line-height: 1.15; letter-spacing: -.6px; max-width: 720px; }
+    .hero h1 em { font-style: normal; color: var(--orange); }
+    .hero p.lead { color: rgba(255,255,255,.72); margin-top: 10px; font-size: 15px; max-width: 620px; line-height: 1.55; }
+    .search { margin-top: 26px; display: flex; background: #fff; border-radius: 12px; padding: 6px; max-width: 760px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .search svg { width: 20px; height: 20px; stroke: var(--text-sub); margin: 0 10px 0 12px; align-self: center; flex-shrink: 0; }
+    .search input { flex: 1; border: none; outline: none; font-size: 15px; color: var(--text); min-width: 0; }
+    .search button { background: var(--orange); color: #fff; border: none; border-radius: 9px; padding: 12px 22px; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .search button:hover { background: var(--orange-dark); }
+    .quick { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12.5px; color: rgba(255,255,255,.6); }
+    .quick button { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: #fff; border-radius: 20px; padding: 5px 12px; font-size: 12.5px; cursor: pointer; }
+    .quick button:hover { background: rgba(255,255,255,.2); }
+
+    .stats { margin-top: -54px; position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat { background: var(--card); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); display: flex; gap: 14px; align-items: center; }
+    .stat-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+    .stat-ic svg { width: 22px; height: 22px; }
+    .stat b { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -.4px; }
+    .stat span { font-size: 12px; color: var(--text-sub); }
+
+    /* ---------- Ticker ---------- */
+    .ticker { margin-top: 18px; background: var(--red-100); border: 1px solid #ffc9cf; border-radius: 12px; display: flex; align-items: center; overflow: hidden; }
+    .ticker-label { background: var(--red); color: #fff; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; padding: 11px 14px; white-space: nowrap; flex-shrink: 0; }
+    .ticker-track { overflow: hidden; flex: 1; }
+    .ticker-inner { display: inline-flex; gap: 34px; white-space: nowrap; padding-left: 100%; animation: tick 45s linear infinite; font-size: 13px; color: #7a1620; }
+    .ticker:hover .ticker-inner { animation-play-state: paused; }
+    .ticker-inner b { font-weight: 700; }
+    @keyframes tick { to { transform: translateX(-100%); } }
+
+    /* ---------- Seções ---------- */
+    section { margin-top: 36px; }
+    .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .sec-head h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; }
+    .sec-head h2::before { content: ''; width: 5px; height: 22px; border-radius: 3px; background: var(--orange); }
+    .sec-head p { color: var(--text-sub); font-size: 13px; }
+
+    /* Destaques */
+    .featured { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .fcard { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); cursor: pointer; transition: transform .15s, box-shadow .15s; display: flex; flex-direction: column; }
+    .fcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .fcard-top { background: linear-gradient(135deg, var(--navy-900), var(--navy-600)); color: #fff; padding: 16px; position: relative; }
+    .fcard-top .uf { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,.14); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+    .fcard-top h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 800; padding-right: 40px; line-height: 1.25; }
+    .fcard-top small { color: rgba(255,255,255,.6); font-size: 11.5px; }
+    .fcard-body { padding: 14px 16px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+    .fcard-body div span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-sub); font-weight: 600; }
+    .fcard-body div b { font-size: 14.5px; font-weight: 700; }
+    .fcard-body .full { grid-column: 1 / -1; }
+
+    /* Layout lista + filtros */
+    .layout { display: grid; grid-template-columns: 270px 1fr; gap: 22px; align-items: start; }
+    aside.filters { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; position: sticky; top: 84px; box-shadow: var(--shadow); }
+    aside.filters h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-sub); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    aside.filters h3 button { background: none; border: none; color: var(--blue-500); font-size: 12px; font-weight: 600; cursor: pointer; text-transform: none; letter-spacing: 0; }
+    .fgroup { margin-bottom: 16px; }
+    .fgroup label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+    .fgroup select { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13px; color: var(--text); }
+    .fgroup select:focus { outline: 2px solid var(--blue-100); border-color: var(--blue-500); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { border: 1px solid var(--border); background: #fff; border-radius: 20px; padding: 6px 11px; font-size: 12.5px; font-weight: 500; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+    .chip .n { background: var(--surface); border-radius: 10px; padding: 0 6px; font-size: 11px; color: var(--text-sub); }
+    .chip.on { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+    .chip.on .n { background: rgba(255,255,255,.18); color: #fff; }
+
+    .results-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+    .results-bar p { color: var(--text-sub); font-size: 13px; }
+    .results-bar p b { color: var(--text); }
+    .results-bar select { padding: 8px 10px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13px; }
+    .btn-filters { display: none; background: var(--navy-900); color: #fff; border: none; border-radius: 9px; padding: 9px 14px; font-weight: 600; cursor: pointer; }
+
+    .list { display: flex; flex-direction: column; gap: 10px; }
+    .row { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); display: grid; grid-template-columns: 6px 56px 1fr auto; align-items: stretch; cursor: pointer; transition: border-color .15s, box-shadow .15s; overflow: hidden; }
+    .row:hover { border-color: var(--blue-500); box-shadow: 0 6px 20px rgba(11,37,69,.12); }
+    .row .band { background: var(--green); }
+    .row.st-breve .band { background: var(--blue-500); }
+    .row.st-previsto .band { background: var(--amber); }
+    .row.st-ultimos .band { background: var(--red); }
+    .row .ufb { display: grid; place-items: center; }
+    .row .ufb span { width: 42px; height: 42px; border-radius: 10px; background: var(--blue-100); color: var(--navy-800); font-weight: 800; font-size: 13px; display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .row .main { padding: 14px 12px 14px 4px; min-width: 0; }
+    .row h4 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .row .meta { color: var(--text-sub); font-size: 12.5px; margin-top: 3px; }
+    .row .cargos { color: var(--text-sub); font-size: 12.5px; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .tag { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 6px; background: var(--surface); color: var(--text); display: inline-flex; gap: 4px; align-items: center; }
+    .tag.money { background: var(--green-100); color: #0b6b35; }
+    .tag.vagas { background: var(--orange-100); color: #a24800; }
+    .row .side { padding: 14px 16px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 6px; border-left: 1px dashed var(--border); min-width: 190px; text-align: right; }
+    .pill { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; padding: 4px 9px; border-radius: 20px; white-space: nowrap; }
+    .pill.aberto { background: var(--green-100); color: #0b6b35; }
+    .pill.ultimos { background: var(--red-100); color: var(--red); }
+    .pill.breve { background: var(--blue-100); color: var(--navy-600); }
+    .pill.previsto { background: var(--amber-100); color: #8a5d00; }
+    .row .date { font-size: 12.5px; color: var(--text-sub); }
+    .row .date b { color: var(--text); }
+    .row .count { font-size: 12px; font-weight: 700; }
+    .count.red { color: var(--red); } .count.green { color: var(--green); } .count.blue { color: var(--blue-500); }
+    .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 12px; padding: 40px; text-align: center; color: var(--text-sub); }
+
+    /* Agenda */
+    .agenda { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .month { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .month h3 { background: var(--navy-900); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; padding: 11px 14px; display: flex; justify-content: space-between; }
+    .month h3 span { color: rgba(255,255,255,.55); font-weight: 600; font-size: 12px; }
+    .month ul { list-style: none; max-height: 300px; overflow-y: auto; }
+    .month li { display: flex; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: center; cursor: pointer; }
+    .month li:hover { background: var(--surface); }
+    .month li:last-child { border-bottom: none; }
+    .dbox { width: 38px; text-align: center; flex-shrink: 0; background: var(--orange-100); color: #a24800; border-radius: 8px; padding: 3px 0; line-height: 1.1; }
+    .dbox b { display: block; font-size: 15px; font-weight: 800; }
+    .dbox small { font-size: 9.5px; text-transform: uppercase; font-weight: 700; }
+    .month li .ag-t { font-weight: 600; }
+    .month li .ag-s { font-size: 11.5px; color: var(--text-sub); }
+
+    /* Bancas */
+    .bancas { display: flex; flex-wrap: wrap; gap: 10px; }
+    .banca { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; gap: 8px; align-items: center; box-shadow: var(--shadow); }
+    .banca:hover { border-color: var(--orange); }
+    .banca span { background: var(--orange-100); color: #a24800; border-radius: 10px; padding: 0 7px; font-size: 11.5px; }
+
+    /* Modal */
+    .overlay { position: fixed; inset: 0; background: rgba(7,26,48,.6); backdrop-filter: blur(3px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 16px; width: 100%; max-width: 620px; max-height: 92vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+    .modal-head { background: linear-gradient(135deg, var(--navy-900), var(--navy-600)); color: #fff; padding: 22px 22px 18px; position: relative; }
+    .modal-head h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; padding-right: 40px; line-height: 1.25; }
+    .modal-head p { color: rgba(255,255,255,.65); font-size: 12.5px; margin-top: 4px; }
+    .modal-head .pill { margin-top: 12px; display: inline-block; }
+    .x { position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 9px; border: none; background: rgba(255,255,255,.12); color: #fff; font-size: 20px; cursor: pointer; }
+    .x:hover { background: rgba(255,255,255,.25); }
+    .modal-body { padding: 20px 22px 24px; }
+    .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+    .kv div span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-sub); font-weight: 600; margin-bottom: 2px; }
+    .kv div b { font-size: 14.5px; }
+    .kv .full { grid-column: 1 / -1; }
+    .kv .full b { font-weight: 500; line-height: 1.5; }
+    .timeline { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+    .timeline h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-sub); margin-bottom: 10px; }
+    .tl { display: flex; gap: 0; }
+    .tl div { flex: 1; text-align: center; position: relative; font-size: 12px; }
+    .tl div::before { content: ''; display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 6px; background: var(--border); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--border); position: relative; z-index: 1; }
+    .tl div.done::before { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
+    .tl div.now::before { background: var(--orange); box-shadow: 0 0 0 3px var(--orange-100); }
+    .tl div::after { content: ''; position: absolute; top: 6px; left: 50%; width: 100%; height: 2px; background: var(--border); }
+    .tl div:last-child::after { display: none; }
+    .tl b { display: block; font-size: 12.5px; }
+    .tl small { color: var(--text-sub); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn { border: none; border-radius: 10px; padding: 12px 18px; font-weight: 700; font-size: 13.5px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn.primary { background: var(--orange); color: #fff; }
+    .btn.primary:hover { background: var(--orange-dark); }
+    .btn.ghost { background: var(--surface); color: var(--text); }
+    .note { margin-top: 14px; font-size: 11.5px; color: var(--text-sub); background: var(--surface); border-radius: 8px; padding: 9px 11px; }
+
+    footer { margin-top: 48px; background: var(--navy-950); color: rgba(255,255,255,.6); font-size: 12px; padding: 28px 0; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; line-height: 1.6; }
+    footer strong { color: #fff; }
+
+    @media (max-width: 1000px) {
+      .featured { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .layout { grid-template-columns: 1fr; }
+      aside.filters { position: static; display: none; }
+      aside.filters.show { display: block; }
+      .btn-filters { display: inline-block; }
+      nav.menu a:not(.cta) { display: none; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 0 16px; }
+      .topbar .hide-sm { display: none; }
+      .featured, .stats { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 5px 1fr; }
+      .row .ufb { display: none; }
+      .row .main { padding: 12px 12px 4px 12px; }
+      .row .side { grid-column: 2; border-left: none; border-top: 1px dashed var(--border); flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; min-width: 0; padding: 10px 12px; text-align: left; }
+      .search button { padding: 12px 14px; }
+      .kv { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div><span class="live-dot"></span>Levantamento atualizado em <b>06/10/2026</b> · status calculado em tempo real</div>
+    <div class="hide-sm">Confira sempre o edital oficial antes de se inscrever</div>
+  </div>
+</div>
+
+<header class="main">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="12" x2="19" y2="5"/></svg></div>
+      <div class="brand-name">Radar<span>Concursos</span></div>
+    </a>
+    <nav class="menu">
+      <a href="#destaques">Destaques</a>
+      <a href="#lista">Todos os editais</a>
+      <a href="#agenda">Agenda de provas</a>
+      <a href="#bancas">Bancas</a>
+      <a class="cta" href="#lista" onclick="setStatus('ultimos')">Últimos dias</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Concursos públicos com inscrições <em>abertas</em>, <em>a abrir</em> e <em>previstos</em> para os próximos 6 meses</h1>
+    <p class="lead">Editais federais, estaduais, municipais e de conselhos reunidos em um só lugar — com prazos, salários, vagas, bancas e a agenda de provas até abril de 2027.</p>
+    <form class="search" onsubmit="event.preventDefault(); applyFilters(); document.getElementById('lista').scrollIntoView();">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="q" type="search" placeholder="Busque por órgão, cargo, banca ou estado (ex.: TRT, professor, FGV, RJ)" autocomplete="off" />
+      <button type="submit">Buscar</button>
+    </form>
+    <div class="quick">Buscas rápidas:
+      <button onclick="quick('policia')">Policial</button>
+      <button onclick="quick('tribunal')">Tribunais</button>
+      <button onclick="quick('professor')">Professor</button>
+      <button onclick="quick('fiscal')">Fiscal</button>
+      <button onclick="quickUF('RJ')">Rio de Janeiro</button>
+      <button onclick="quick('tecnologia')">TI</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="ticker" id="ticker">
+    <div class="ticker-label">⏰ Encerrando</div>
+    <div class="ticker-track"><div class="ticker-inner" id="tickerInner"></div></div>
+  </div>
+
+  <section id="destaques">
+    <div class="sec-head">
+      <h2>Concursos em destaque</h2>
+      <p>Maiores salários e volumes de vagas do momento</p>
+    </div>
+    <div class="featured" id="featured"></div>
+  </section>
+
+  <section id="lista">
+    <div class="sec-head">
+      <h2>Todos os editais</h2>
+      <p>Clique em um concurso para ver detalhes e o link da banca</p>
+    </div>
+    <div class="layout">
+      <aside class="filters" id="filters">
+        <h3>Filtros <button onclick="resetFilters()">Limpar</button></h3>
+        <div class="fgroup">
+          <label>Situação</label>
+          <div class="chips" id="statusChips"></div>
+        </div>
+        <div class="fgroup">
+          <label for="fRegiao">Região / Estado</label>
+          <select id="fRegiao"></select>
+        </div>
+        <div class="fgroup">
+          <label for="fArea">Área</label>
+          <select id="fArea"></select>
+        </div>
+        <div class="fgroup">
+          <label for="fEsc">Escolaridade</label>
+          <select id="fEsc">
+            <option value="">Todas</option>
+            <option value="F">Fundamental</option>
+            <option value="M">Médio / Técnico</option>
+            <option value="S">Superior</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label for="fEsf">Esfera</label>
+          <select id="fEsf">
+            <option value="">Todas</option>
+            <option>Federal</option><option>Estadual</option><option>Municipal</option><option>Conselho</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label for="fSal">Salário mínimo</label>
+          <select id="fSal">
+            <option value="0">Qualquer valor</option>
+            <option value="5000">Acima de R$ 5 mil</option>
+            <option value="10000">Acima de R$ 10 mil</option>
+            <option value="15000">Acima de R$ 15 mil</option>
+            <option value="20000">Acima de R$ 20 mil</option>
+          </select>
+        </div>
+      </aside>
+
+      <div>
+        <div class="results-bar">
+          <button class="btn-filters" onclick="document.getElementById('filters').classList.toggle('show')">☰ Filtros</button>
+          <p id="resultsInfo"></p>
+          <select id="fSort" aria-label="Ordenar">
+            <option value="prazo">Ordenar: prazo mais próximo</option>
+            <option value="salario">Ordenar: maior salário</option>
+            <option value="vagas">Ordenar: mais vagas</option>
+            <option value="nome">Ordenar: nome (A–Z)</option>
+          </select>
+        </div>
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agenda">
+    <div class="sec-head">
+      <h2>Agenda de provas</h2>
+      <p>Provas objetivas já marcadas até abril de 2027 (inclui editais com inscrições encerradas)</p>
+    </div>
+    <div class="agenda" id="agendaGrid"></div>
+  </section>
+
+  <section id="bancas">
+    <div class="sec-head">
+      <h2>Concursos por banca</h2>
+      <p>Clique para filtrar a lista</p>
+    </div>
+    <div class="bancas" id="bancaList"></div>
+  </section>
+</main>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal" role="dialog" aria-modal="true" id="modal"></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Radar de Concursos</strong><br>Informações compiladas de editais e portais especializados em 06/10/2026. Datas e valores podem ser retificados — o edital oficial sempre prevalece.</div>
+    <div>Idealizador: Alamir Rodrigues Rangel Júnior · Implementado por: Claude AI — Anthropic</div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   BASE DE DADOS
+   esc: F = fundamental, M = médio/técnico, S = superior
+   ini/fim = período de inscrições (AAAA-MM-DD); prova = data da prova
+   prev = texto de previsão (somente para concursos ainda sem edital)
+   enc = true → inscrições já encerradas (aparece só na agenda de provas)
+   ========================================================= */
+var BANCAS = {
+  'Cebraspe': 'https://www.cebraspe.org.br',
+  'FCC': 'https://www.concursosfcc.com.br',
+  'Cesgranrio': 'https://www.cesgranrio.org.br',
+  'FGV': 'https://conhecimento.fgv.br',
+  'Instituto AOCP': 'https://www.institutoaocp.org.br',
+  'Fundação CETAP': 'https://www.fundacaocetap.com.br',
+  'UECE/CEV': 'https://www.cev.uece.br',
+  'Fundep': 'https://fundep.selecao.net.br',
+  'Instituto Avalia': 'https://www.avalia.org.br',
+  'IBGP': 'https://www.ibgpconcursos.com.br',
+  'Consulplan': 'https://www.institutoconsulplan.org.br',
+  'JCM Concursos': 'https://concursosjcm.com.br',
+  'UFC/FCPC': 'https://centraldeconcursos.fcpc.ufc.br',
+  'Instituto Verbena': 'https://www.institutoverbena.ufg.br',
+  'Ibade': 'https://ibade.org.br',
+  'IDIB': 'https://www.idib.org.br',
+  'Quadrix': 'https://www.quadrix.org.br',
+  'Vunesp': 'https://www.vunesp.com.br',
+  'Iades': 'https://www.iades.com.br',
+  'CPCON/UEPB': 'https://cpcon.uepb.edu.br'
+};
+
+var DATA = [
+  /* ---------------- FEDERAIS ---------------- */
+  { o:'Câmara dos Deputados', uf:'DF', esf:'Federal', area:'Legislativa', esc:['S'], vagas:66, cr:true, crN:118, sal:32070.88, ini:'2026-10-15', fim:'2026-11-17', prova:'2027-01-17', banca:'Cebraspe', taxa:'R$ 130', cargos:'Analista Legislativo (diversas especialidades)', dest:true },
+  { o:'TRT 8ª Região (PA/AP)', uf:'PA', esf:'Federal', area:'Tribunais e Jurídica', esc:['S'], vagas:0, cr:true, sal:16040.88, ini:'2026-10-05', fim:'2026-11-05', banca:'FCC', taxa:'R$ 90 a R$ 110', cargos:'Analista Judiciário (Judiciária, Oficial de Justiça, Administrativa, TI, Contabilidade e outras) e Técnico Judiciário (Administrativa, TI, Enfermagem, Polícia Judicial)', dest:true },
+  { o:'AgSUS — Agência de Apoio à Gestão do SUS', uf:'BR', esf:'Federal', area:'Saúde', esc:['S'], vagas:0, cr:true, sal:8800, fim:'2026-10-16', banca:'Cebraspe', taxa:'Gratuita', cargos:'Psicólogo' },
+  { o:'Marinha — Serviço Militar Voluntário (Dentistas)', uf:'BR', esf:'Federal', area:'Militar', esc:['S'], vagas:0, cr:true, sal:null, fim:'2026-11-10', banca:'Marinha do Brasil', url:'http://www.rm2marinha.com.br/oficiais-nivel-superior-edital/', taxa:'R$ 150', cargos:'Cirurgião-dentista (clínico geral e especialidades) — 9 editais, um por Distrito Naval' },
+  { o:'IFPA — Instituto Federal do Pará', uf:'PA', esf:'Federal', area:'Educação', esc:['M','S'], vagas:65, cr:true, sal:5215.39, fim:'2026-10-20', banca:'Instituto AOCP', taxa:'R$ 100 e R$ 120', cargos:'Assistente em Administração, Técnico de TI, Técnico em Enfermagem, Analista de TI, Auditor, Técnico em Assuntos Educacionais e outros' },
+  { o:'IFAP — Instituto Federal do Amapá', uf:'AP', esf:'Federal', area:'Educação', esc:['M','S'], vagas:23, cr:true, sal:5215.39, fim:'2026-10-29', banca:'IFAP', url:'http://concursopublico.ifap.edu.br/concurso/', taxa:'R$ 90 e R$ 120', cargos:'Analista de TI (6), Médico, Enfermeiro, Assistente em Administração, Técnico de Laboratório e outros' },
+  { o:'IFSP — Instituto Federal de São Paulo', uf:'SP', esf:'Federal', area:'Educação', esc:['S'], vagas:35, sal:13753.96, ini:'2026-10-06', fim:'2026-11-17', banca:'IFSP', url:'https://concursopublico.ifsp.edu.br', taxa:'R$ 200', cargos:'Professor EBTT — Informática (18), Pedagogia (7), Eletrônica (5), Design Gráfico (4) e outras áreas' },
+  { o:'UFC — Universidade Federal do Ceará', uf:'CE', esf:'Federal', area:'Educação', esc:['S'], vagas:65, cr:true, sal:13753.96, fim:'2026-10-13', banca:'UFC/FCPC', taxa:'R$ 290 a R$ 395', cargos:'Professor do Magistério Superior — 65 áreas (Computação, Educação Especial Inclusiva, Medicina, Engenharias etc.)' },
+  { o:'UFRN — Professor do Magistério Superior', uf:'RN', esf:'Federal', area:'Educação', esc:['S'], vagas:15, cr:true, sal:14945.96, fim:'2026-10-23', banca:'UFRN', url:'https://sigrh.ufrn.br', taxa:'R$ 180 a R$ 220', cargos:'Professor — Aprendizado de Máquina, IA Generativa, Segurança Cibernética e outras áreas' },
+  { o:'UFRN — Professor EBTT', uf:'RN', esf:'Federal', area:'Educação', esc:['S'], vagas:9, cr:true, sal:14928.96, ini:'2026-10-07', fim:'2026-11-05', banca:'UFRN', url:'https://sigrh.ufrn.br', taxa:'R$ 150', cargos:'Professor EBTT — IA, Geografia, Matemática, Música, Enfermagem' },
+  { o:'UFRRJ — Técnico-Administrativos', uf:'RJ', esf:'Federal', area:'Educação', esc:['M'], vagas:13, cr:true, sal:3181, fim:'2026-10-13', banca:'UFRRJ', cargos:'Cargos técnico-administrativos de nível médio e técnico' },
+  { o:'UFMG — Professor (Nutrição no Esporte)', uf:'MG', esf:'Federal', area:'Educação', esc:['S'], vagas:1, sal:13753.96, fim:'2026-12-26', banca:'UFMG', taxa:'R$ 215,99', cargos:'Professor Assistente — Nutrição em Esporte e Exercício Físico' },
+
+  /* ---------------- ESTADUAIS ---------------- */
+  { o:'Polícia Civil de Pernambuco (PC PE)', uf:'PE', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:1315, sal:21000, ini:'2026-10-15', fim:'2026-11-12', banca:'Cebraspe', cargos:'Agente de Polícia (1.200), Escrivão (70), Delegado (45)', salObs:'até cerca de R$ 21 mil (Delegado), conforme divulgação', dest:true },
+  { o:'Seduc CE — Secretaria da Educação do Ceará', uf:'CE', esf:'Estadual', area:'Educação', esc:['S'], vagas:2000, cr:true, crN:1000, sal:7181.41, fim:'2026-10-15', prova:'2026-11-22', banca:'UECE/CEV', taxa:'R$ 150', cargos:'Professor — Português (300), Matemática (300), Educação Física, AEE (174), Química, Física e outras', dest:true },
+  { o:'ALEPA — Assembleia Legislativa do Pará', uf:'PA', esf:'Estadual', area:'Legislativa', esc:['M','S'], vagas:135, cr:true, sal:10353.64, ini:'2026-10-01', fim:'2026-11-04', prova:'2026-12-13', banca:'Fundação CETAP', taxa:'R$ 98 a R$ 118', cargos:'Assistência Administrativa, Analista Legislativo (várias áreas), Consultor e Procurador' },
+  { o:'Sefaz AL — Auditor Fiscal', uf:'AL', esf:'Estadual', area:'Fiscal e Controle', esc:['S'], vagas:40, cr:true, crN:60, sal:25270.68, fim:'2026-10-21', banca:'Cebraspe', url:'http://www.cebraspe.org.br/concursos/sefaz_al_26', taxa:'R$ 300', cargos:'Auditor Fiscal da Administração Tributária Estadual', dest:true },
+  { o:'SAEB BA — Especialista em Políticas Públicas (EPPGG)', uf:'BA', esf:'Estadual', area:'Gestão e Administrativa', esc:['S'], vagas:50, sal:10860.62, ini:'2026-10-16', fim:'2026-11-11', banca:'Cesgranrio', taxa:'R$ 220', cargos:'Especialista em Políticas Públicas e Gestão Governamental' },
+  { o:'Seplag RJ — Gestão Governamental', uf:'RJ', esf:'Estadual', area:'Gestão e Administrativa', esc:['S'], vagas:60, cr:true, sal:14387.75, fim:'2026-10-08', banca:'FGV', url:'https://conhecimento.fgv.br/seplagrj', taxa:'R$ 125', cargos:'Especialista em Políticas Públicas e Gestão Governamental (30) e Analista de Planejamento e Orçamento (30)' },
+  { o:'Defensoria Pública da Paraíba (DPE PB)', uf:'PB', esf:'Estadual', area:'Tribunais e Jurídica', esc:['M','S'], vagas:20, cr:true, sal:5197.5, fim:'2026-11-13', banca:'FCC', taxa:'R$ 103 a R$ 123', cargos:'Técnico da Defensoria (9), Analista — Assistente Jurídico, Desenvolvimento de Sistemas, Segurança da Informação e outros' },
+  { o:'Emater MG', uf:'MG', esf:'Estadual', area:'Meio Ambiente e Agro', esc:['M','S'], vagas:120, cr:true, sal:7321.75, ini:'2026-09-30', fim:'2026-10-30', prova:'2026-11-29', banca:'Fundep', taxa:'R$ 80 a R$ 100', cargos:'Extensionista Agropecuário, Assistente Administrativo, Auxiliar Técnico, Analista de Sistemas e outros' },
+  { o:'PM MG — Curso de Formação de Oficiais (CFO)', uf:'MG', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:90, sal:12170.61, fim:'2026-12-10', banca:'PMMG', url:'https://policiamilitar.mg.gov.br/site/crs', taxa:'R$ 243', cargos:'Cadete PM (exige bacharelado em Direito)' },
+  { o:'SEMA MT — Secretaria de Meio Ambiente', uf:'MT', esf:'Estadual', area:'Meio Ambiente e Agro', esc:['S'], vagas:0, cr:true, sal:10491.97, fim:'2026-10-14', banca:'Cesgranrio', taxa:'R$ 150', cargos:'Analista de Meio Ambiente e Analista de Desenvolvimento Econômico e Social (inclui TI)' },
+  { o:'Polícia Civil do Amapá (PC AP)', uf:'AP', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:0, cr:true, crN:396, sal:null, fim:'2026-10-19', prova:'2026-12-06', banca:'Ver edital', cargos:'Oficial Investigador (294 CR) e Delegado (102 CR)' },
+  { o:'Sesa AP — Secretaria de Saúde do Amapá', uf:'AP', esf:'Estadual', area:'Saúde', esc:['M','S'], vagas:0, cr:true, crN:4210, sal:null, ini:'2026-09-14', fim:'2026-10-13', banca:'Ver edital', cargos:'Diversas carreiras da Saúde (4.210 vagas em cadastro de reserva)' },
+  { o:'Detran SP — Agente Estadual de Trânsito', uf:'SP', esf:'Estadual', area:'Trânsito', esc:['M'], vagas:145, cr:true, sal:5702.18, fim:'2026-10-07', prova:'2026-11-01', banca:'Instituto Avalia', taxa:'R$ 98', cargos:'Agente Estadual de Trânsito' },
+
+  /* ---------------- MUNICIPAIS ---------------- */
+  { o:'Prefeitura de Curitiba', uf:'PR', esf:'Municipal', area:'Prefeituras (diversos)', esc:['M','S'], vagas:348, sal:null, ini:'2026-10-07', fim:'2026-11-05', banca:'Fafipa', cargos:'Agente Administrativo, Fiscal, Analista, Engenheiro Civil, Procurador e outros' },
+  { o:'Prefeitura de São João del-Rei', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:256, cr:true, sal:15164.56, ini:'2026-10-13', fim:'2026-11-12', banca:'IBGP', taxa:'R$ 60 a R$ 100', cargos:'Cargos de níveis fundamental, médio, técnico e superior' },
+  { o:'Prefeitura de Trindade', uf:'PE', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:353, sal:null, fim:'2026-10-19', banca:'Ver edital', cargos:'Diversos cargos' },
+  { o:'Prefeitura de Catu', uf:'BA', esf:'Municipal', area:'Educação', esc:['M','S'], vagas:190, cr:true, sal:4690.16, fim:'2026-10-30', banca:'Passaporte PDH', url:'https://passaportepdh.com.br', taxa:'R$ 65 e R$ 100', cargos:'Professores (anos iniciais, especialistas, AEE), Coordenador Pedagógico, Psicólogo Educacional, Enfermeiro e outros' },
+  { o:'Prefeitura de Belo Vale', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:179, sal:8000, fim:'2026-11-03', banca:'Consulplan', taxa:'R$ 50 a R$ 120', cargos:'Cargos de níveis fundamental, médio, técnico e superior' },
+  { o:'Prefeitura de Aracati', uf:'CE', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:127, cr:true, sal:5431, fim:'2026-11-06', banca:'UFC/FCPC', taxa:'R$ 120 e R$ 150', cargos:'Auditor Fiscal, Psicólogo, Terapeuta ABA, Psicopedagogo, Vigilante Sanitário, Auxiliar de Serviço e outros' },
+  { o:'Prefeitura de Pedro Teixeira', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:125, sal:9111.26, fim:'2026-10-30', banca:'JCM Concursos', taxa:'R$ 70 a R$ 130', cargos:'Cargos de níveis fundamental, médio, técnico e superior' },
+  { o:'Prefeitura de Ivaiporã', uf:'PR', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:15, sal:18106.37, fim:'2026-10-13', banca:'Fafipa', cargos:'Diversos, incluindo Técnico em Informática' },
+  { o:'Prefeitura de São Vicente de Minas', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:35, sal:15142.28, fim:'2026-11-05', banca:'Access', url:'https://access.selecao.net.br/informacoes/174/', taxa:'R$ 40 a R$ 70', cargos:'Cargos de níveis fundamental, médio, técnico e superior' },
+  { o:'Prefeitura de Paiva', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:13, sal:5494.76, fim:'2026-11-18', banca:'JCM Concursos', url:'https://concursosjcm.com.br/informacoes/172/', taxa:'R$ 70 a R$ 200', cargos:'Cargos de níveis alfabetizado a superior' },
+  { o:'Prefeitura de Joaçaba', uf:'SC', esf:'Municipal', area:'Educação', esc:['F','M','S'], vagas:0, cr:true, sal:3845.63, fim:'2026-11-20', banca:'Aprender SC', url:'https://www.aprendersc.srv.br', taxa:'R$ 30 a R$ 80', cargos:'Professores (Ciências, Ed. Física, Geografia, Português, Matemática) e Profissional de Apoio Escolar' },
+  { o:'Prefeitura de Rio Verde — Auditor Fiscal', uf:'GO', esf:'Municipal', area:'Fiscal e Controle', esc:['S'], vagas:5, sal:4809, fim:'2026-10-22', banca:'UniRV', url:'https://www.unirv.edu.br', taxa:'R$ 290', cargos:'Auditor Fiscal da Receita Municipal' },
+  { o:'Prefeitura de Rio Verde — Trânsito', uf:'GO', esf:'Municipal', area:'Trânsito', esc:['M'], vagas:8, cr:true, sal:3588.55, fim:'2026-10-19', banca:'UniRV', url:'https://www.unirv.edu.br', taxa:'R$ 190 a R$ 290', cargos:'Agente Municipal de Trânsito (5) e Vistoriador de Veículos (3)' },
+  { o:'Guarda Municipal de Santa Maria de Jetibá', uf:'ES', esf:'Municipal', area:'Policial e Segurança', esc:['M'], vagas:30, cr:true, crN:20, sal:3763.26, fim:'2026-10-21', banca:'Consulplan', taxa:'R$ 150', cargos:'Guarda Municipal' },
+  { o:'Guarda Civil Municipal de Santana', uf:'AP', esf:'Municipal', area:'Policial e Segurança', esc:['M'], vagas:0, sal:2100, ini:'2026-10-14', fim:'2026-11-09', prova:'2027-01-17', banca:'Ver edital', taxa:'R$ 110', cargos:'Guarda Civil Municipal' },
+  { o:'Câmara Municipal de Pires do Rio', uf:'GO', esf:'Municipal', area:'Legislativa', esc:['M','S'], vagas:12, cr:true, crN:30, sal:6523.44, ini:'2026-10-19', fim:'2026-11-18', banca:'Instituto Verbena', taxa:'R$ 115 a R$ 145', cargos:'Analista de Sistemas, Analista Legislativo, Analista de Comunicação, Assistente Administrativo e outros' },
+  { o:'Câmara Municipal de Guarabira', uf:'PB', esf:'Municipal', area:'Legislativa', esc:['F','M','S'], vagas:0, sal:3354.7, ini:'2026-10-21', fim:'2026-11-22', banca:'Ver edital', taxa:'R$ 75 a R$ 115', cargos:'Cargos efetivos da Câmara' },
+  { o:'Prefeitura de Piracema', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['M'], vagas:0, sal:null, ini:'2026-10-20', fim:'2026-11-18', banca:'Ver edital', cargos:'Diversos, incluindo Técnico em Informática' },
+  { o:'SETEC Campinas', uf:'SP', esf:'Municipal', area:'Gestão e Administrativa', esc:['S'], vagas:0, sal:null, fim:'2026-12-04', banca:'Ver edital', cargos:'Analista Técnico — Informática e outros' },
+  { o:'Prefeitura de Coronel Vivida', uf:'PR', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:65, sal:null, fim:'2026-10-08', banca:'Fafipa', cargos:'Diversos, incluindo Analista de TI' },
+  { o:'Prefeitura de Ipaba', uf:'MG', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:240, sal:5275.34, fim:'2026-10-08', banca:'IBGP', taxa:'R$ 60 a R$ 100', cargos:'Cargos de níveis fundamental, médio/técnico e superior' },
+  { o:'Prefeitura de Areia', uf:'PB', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:195, sal:4782.72, fim:'2026-10-12', banca:'CPCON/UEPB', url:'https://cpcon.uepb.edu.br/pmAreia2026', taxa:'R$ 75 a R$ 115', cargos:'Professores, Intérprete de Libras (22), Médicos, Enfermeiros, Motoristas e outros' },
+  { o:'Prefeitura de Cruzeta', uf:'RN', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:124, cr:true, sal:9867.47, fim:'2026-10-12', banca:'IDIB', url:'https://concurso.idib.org.br/Concurso.aspx?ID=365', taxa:'R$ 100 a R$ 150', cargos:'Professores, Cuidador de Aluno, Psicólogo, Médico, Assistente Administrativo e outros' },
+  { o:'Prefeitura de Petrolina de Goiás', uf:'GO', esf:'Municipal', area:'Prefeituras (diversos)', esc:['F','M','S'], vagas:96, cr:true, sal:11919, fim:'2026-10-12', banca:'Ganzaroli', url:'https://www.ganzaroliassessoria.com.br/', taxa:'R$ 80 a R$ 150', cargos:'Professores, Médico ESF, Enfermeiro, Motorista, Agente Administrativo e outros' },
+
+  /* ---------------- CONSELHOS ---------------- */
+  { o:'CRQ-9 — Conselho Regional de Química (PR)', uf:'PR', esf:'Conselho', area:'Conselhos', esc:['M','S'], vagas:330, sal:null, fim:'2026-10-21', prova:'2026-11-29', banca:'Quadrix', cargos:'Cargos de níveis médio e superior (provas em Curitiba e Maringá)' },
+  { o:'CREA-PR', uf:'PR', esf:'Conselho', area:'Conselhos', esc:['M','S'], vagas:7, cr:true, sal:13778.5, fim:'2026-10-15', prova:'2026-11-22', banca:'UniFil', cargos:'Analista de Sistemas e outros cargos de níveis médio e superior' },
+  { o:'CREMERJ — Conselho Regional de Medicina do RJ', uf:'RJ', esf:'Conselho', area:'Conselhos', esc:['M','S'], vagas:0, sal:null, fim:'2026-10-22', banca:'Ver edital', cargos:'Cargos administrativos e de Tecnologia da Informação' },
+  { o:'CREF ES — Educação Física 22ª Região', uf:'ES', esf:'Conselho', area:'Conselhos', esc:['S'], vagas:2, cr:true, sal:5500, fim:'2026-10-20', banca:'Ibade', taxa:'R$ 90', cargos:'Advogado, Contador e Analista Administrativo (CR)' },
+  { o:'CRBio-01', uf:'SP', esf:'Conselho', area:'Conselhos', esc:['S'], vagas:0, sal:null, fim:'2026-10-21', banca:'Ver edital', cargos:'Analista de Tecnologia da Informação e outros' },
+
+  /* ---------------- PREVISTOS (sem edital) ---------------- */
+  { o:'SEDF — Secretaria de Educação do DF', uf:'DF', esf:'Estadual', area:'Educação', esc:['S'], vagas:10604, sal:null, prev:'Edital previsto para novembro/2026 (banca em escolha)', cargos:'Professores e carreiras da educação', dest:true },
+  { o:'IBGE — Recenseador (temporário)', uf:'BR', esf:'Federal', area:'Gestão e Administrativa', esc:['M'], vagas:27279, sal:null, prev:'Banca contratada; edital esperado a qualquer momento', banca:'Cesgranrio', cargos:'Recenseador' },
+  { o:'CGU — Auditor Federal de Finanças e Controle', uf:'BR', esf:'Federal', area:'Fiscal e Controle', esc:['S'], vagas:60, sal:20000, prev:'Banca contratada; edital nas próximas semanas', banca:'Cebraspe', cargos:'Auditor Federal de Finanças e Controle' },
+  { o:'TRF 3ª Região — Apoio', uf:'SP', esf:'Federal', area:'Tribunais e Jurídica', esc:['S'], vagas:0, sal:16000, prev:'Banca definida', banca:'Vunesp', cargos:'A definir' },
+  { o:'INB — Indústrias Nucleares do Brasil', uf:'RJ', esf:'Federal', area:'Gestão e Administrativa', esc:['M','S'], vagas:0, cr:true, sal:null, prev:'Banca contratada; edital iminente', banca:'FGV', cargos:'Diversos cargos de nível médio/técnico e superior' },
+  { o:'Sefaz DF — Auditor-Fiscal', uf:'DF', esf:'Estadual', area:'Fiscal e Controle', esc:['S'], vagas:265, sal:26886.65, prev:'Banca contratada; edital em elaboração', banca:'Cebraspe', cargos:'Auditor-Fiscal da Receita do DF' },
+  { o:'Sefaz RS — Receita Estadual', uf:'RS', esf:'Estadual', area:'Fiscal e Controle', esc:['S'], vagas:46, sal:39877.31, prev:'Banca definida', banca:'FCC', cargos:'Auditor Fiscal e Analista Tributário da Receita Estadual' },
+  { o:'Sefaz BA — Auditor e Agente de Tributos', uf:'BA', esf:'Estadual', area:'Fiscal e Controle', esc:['S'], vagas:200, sal:19000, prev:'Banca definida; edital pode sair em outubro', banca:'Cesgranrio', cargos:'Auditor-Fiscal (100) e Agente de Tributos Estaduais (100)' },
+  { o:'Sefaz SP — APOFP', uf:'SP', esf:'Estadual', area:'Fiscal e Controle', esc:['S'], vagas:60, sal:6002.61, prev:'Banca contratada', banca:'FCC', cargos:'Analista em Planejamento, Orçamento e Finanças Públicas' },
+  { o:'Polícia Civil do RJ — Peritos e Piloto', uf:'RJ', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:329, sal:null, prev:'Banca definida; contrato validado', banca:'FGV', cargos:'Perito Criminal, Perito Legista e Piloto Policial' },
+  { o:'Polícia Civil do RJ — Delegado', uf:'RJ', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:85, sal:26000, prev:'Banca contratada; edital pode sair em outubro', banca:'Cesgranrio', cargos:'Delegado de Polícia' },
+  { o:'Theatro Municipal do RJ', uf:'RJ', esf:'Estadual', area:'Gestão e Administrativa', esc:['F','M','S'], vagas:110, sal:3790.43, prev:'Banca definida; edital na fase final', banca:'Instituto Avalia', cargos:'Diversos' },
+  { o:'CRO RJ — Conselho Regional de Odontologia', uf:'RJ', esf:'Conselho', area:'Conselhos', esc:['M','S'], vagas:0, sal:5450, prev:'Banca definida; edital iminente', banca:'Consulplan', cargos:'Cargos de níveis médio e superior' },
+  { o:'Câmara Municipal de Itaperuna', uf:'RJ', esf:'Municipal', area:'Legislativa', esc:['M','S'], vagas:0, sal:null, prev:'Banca contratada', banca:'Ver edital', cargos:'A definir' },
+  { o:'Polícia Penal de Pernambuco', uf:'PE', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:700, sal:5000, prev:'Banca contratada; edital anunciado para outubro', banca:'Cebraspe', cargos:'Policial Penal' },
+  { o:'Corpo de Bombeiros e PM de Pernambuco', uf:'PE', esf:'Estadual', area:'Policial e Segurança', esc:['M','S'], vagas:570, sal:null, prev:'Editais anunciados até dezembro/2026', cargos:'Bombeiros: 510 soldados e 60 oficiais; PM PE com edital também previsto' },
+  { o:'PM SC — Soldado', uf:'SC', esf:'Estadual', area:'Policial e Segurança', esc:['S'], vagas:500, sal:6000, prev:'Banca definida', banca:'Instituto AOCP', cargos:'Soldado (CFP)' },
+  { o:'Seinfra GO — Analista de Infraestrutura', uf:'GO', esf:'Estadual', area:'Gestão e Administrativa', esc:['S'], vagas:300, sal:5646.35, prev:'Banca definida', banca:'Instituto Verbena', cargos:'Analista Técnico de Infraestrutura (progressão até R$ 16.392,48)' },
+  { o:'SP Águas', uf:'SP', esf:'Estadual', area:'Meio Ambiente e Agro', esc:['S'], vagas:190, sal:12070, prev:'Banca contratada', banca:'FGV', cargos:'Especialista e Analista' },
+  { o:'CDHU SP', uf:'SP', esf:'Estadual', area:'Gestão e Administrativa', esc:['M','S'], vagas:388, sal:null, prev:'Banca contratada', banca:'Vunesp', cargos:'A definir' },
+  { o:'IPA SP — Instituto de Pesquisas Ambientais', uf:'SP', esf:'Estadual', area:'Meio Ambiente e Agro', esc:['S'], vagas:98, sal:9052.47, prev:'Banca definida', banca:'Vunesp', cargos:'Pesquisador Científico I' },
+  { o:'Polícia Científica de SP', uf:'SP', esf:'Estadual', area:'Policial e Segurança', esc:['M'], vagas:397, sal:6588.73, prev:'Autorizado; escolha da banca em andamento', cargos:'Atendente de Necrotério, Auxiliar de Necropsia, Desenhista e Fotógrafo Técnico-Pericial' },
+  { o:'Governo do Amapá — Assistente Administrativo', uf:'AP', esf:'Estadual', area:'Gestão e Administrativa', esc:['M'], vagas:185, sal:3717.86, prev:'Banca definida', banca:'IDCAP', cargos:'Assistente Administrativo' },
+  { o:'Agtran PA', uf:'PA', esf:'Estadual', area:'Trânsito', esc:['M','S'], vagas:152, sal:null, prev:'Banca contratada', banca:'Fundação CETAP', cargos:'Analistas (Transporte, Administração, TI), Controlador, Técnico em Informática, Assistente Administrativo' },
+  { o:'DPE AM — Defensoria Pública do Amazonas', uf:'AM', esf:'Estadual', area:'Tribunais e Jurídica', esc:['M','S'], vagas:5, cr:true, sal:6430.59, prev:'Banca contratada; pode sair a qualquer momento', banca:'FCC', cargos:'Analista e Assistente Técnico' },
+  { o:'Aleac — Assembleia Legislativa do Acre', uf:'AC', esf:'Estadual', area:'Legislativa', esc:['M','S'], vagas:50, sal:7553, prev:'Banca contratada', banca:'Idecan', cargos:'A definir' },
+  { o:'Idaf ES', uf:'ES', esf:'Estadual', area:'Meio Ambiente e Agro', esc:['M','S'], vagas:14, cr:true, sal:7547.78, prev:'Banca contratada; edital iminente', banca:'IDCAP', cargos:'Técnico de Fiscalização Agropecuária e Fiscal Estadual Agropecuário' },
+  { o:'DP DF — Defensoria Pública do DF', uf:'DF', esf:'Estadual', area:'Tribunais e Jurídica', esc:['S'], vagas:7, sal:9357.81, prev:'Banca contratada', banca:'Access', cargos:'Analista de Apoio à Assistência Judiciária' },
+  { o:'SP Parcerias', uf:'SP', esf:'Municipal', area:'Gestão e Administrativa', esc:['S'], vagas:5, cr:true, crN:25, sal:6200, prev:'Banca definida; aguardando contrato', banca:'Access', cargos:'Analista Quantitativo, Arquitetônico e Administrativo Júnior' },
+
+  /* ---------------- SOMENTE AGENDA (inscrições encerradas) ---------------- */
+  { o:'TCE SP', uf:'SP', esf:'Estadual', enc:true, prova:'2026-10-11' },
+  { o:'Dataprev', uf:'BR', esf:'Federal', enc:true, prova:'2026-10-11' },
+  { o:'PM MA', uf:'MA', esf:'Estadual', enc:true, prova:'2026-10-11' },
+  { o:'CRA RJ', uf:'RJ', esf:'Conselho', enc:true, prova:'2026-10-18', banca:'Iades' },
+  { o:'CRM PR', uf:'PR', esf:'Conselho', enc:true, prova:'2026-10-18' },
+  { o:'Seplag MG', uf:'MG', esf:'Estadual', enc:true, prova:'2026-11-08', obs:'provas em 08 e 15/11' },
+  { o:'Câmara de Governador Valadares', uf:'MG', esf:'Municipal', enc:true, prova:'2026-11-22', banca:'FGV' },
+  { o:'TCDF', uf:'DF', esf:'Estadual', enc:true, prova:'2026-11-22', banca:'Cebraspe' },
+  { o:'Prefeitura de Queimados', uf:'RJ', esf:'Municipal', enc:true, prova:'2026-11-20', obs:'provas em 20 e 22/11' },
+  { o:'Valença — Educação', uf:'RJ', esf:'Municipal', enc:true, prova:'2026-11-22' },
+  { o:'Arraial do Cabo — Saúde', uf:'RJ', esf:'Municipal', enc:true, prova:'2026-11-22' },
+  { o:'CRA AM', uf:'AM', esf:'Conselho', enc:true, prova:'2026-11-22' },
+  { o:'Câmara de Rio Branco', uf:'AC', esf:'Municipal', enc:true, prova:'2026-11-22' }
+];
+
+/* ---------- Utilidades ---------- */
+var REGIOES = {
+  'Norte':['AC','AM','AP','PA','RO','RR','TO'], 'Nordeste':['AL','BA','CE','MA','PB','PE','PI','RN','SE'],
+  'Centro-Oeste':['DF','GO','MS','MT'], 'Sudeste':['ES','MG','RJ','SP'], 'Sul':['PR','RS','SC']
+};
+var MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+var MES3 = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+var ESC = { F:'Fundamental', M:'Médio/Técnico', S:'Superior' };
+
+function d(s) { if (!s) return null; var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+var LIMIT = new Date(TODAY); LIMIT.setMonth(LIMIT.getMonth() + 6);
+function days(a, b) { return Math.round((b - a) / 86400000); }
+function fmtD(s) { var x = d(s); return ('0'+x.getDate()).slice(-2) + '/' + ('0'+(x.getMonth()+1)).slice(-2) + '/' + x.getFullYear(); }
+function money(v) { return v == null ? null : 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
+function moneyShort(v) { if (v == null) return '—'; return v >= 1000 ? 'R$ ' + (v/1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mil' : money(v); }
+function norm(s) { return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+function esc(s) { return (s || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function regiaoDe(uf) { for (var r in REGIOES) if (REGIOES[r].indexOf(uf) > -1) return r; return 'Nacional'; }
+
+function status(c) {
+  if (c.enc) return 'encerrado';
+  if (c.prev) return 'previsto';
+  var fim = d(c.fim), ini = d(c.ini);
+  if (fim && fim < TODAY) return 'encerrado';
+  if (ini && ini > TODAY) return 'breve';
+  if (fim && days(TODAY, fim) <= 5) return 'ultimos';
+  return 'aberto';
+}
+var ST_LABEL = { aberto:'Inscrições abertas', ultimos:'Últimos dias', breve:'Em breve', previsto:'Previsto' };
+
+function vagasTxt(c) {
+  var parts = [];
+  if (c.vagas) parts.push(c.vagas.toLocaleString('pt-BR') + ' vaga' + (c.vagas > 1 ? 's' : ''));
+  if (c.crN) parts.push((c.vagas ? '+ ' : '') + c.crN.toLocaleString('pt-BR') + ' CR');
+  else if (c.cr) parts.push(c.vagas ? '+ CR' : 'Cadastro reserva');
+  return parts.length ? parts.join(' ') : 'Ver edital';
+}
+function totalVagas(c) { return (c.vagas || 0) + (c.crN || 0); }
+function link(c) {
+  if (c.url) return c.url;
+  if (c.banca && BANCAS[c.banca]) return BANCAS[c.banca];
+  return 'https://www.google.com/search?q=' + encodeURIComponent('edital concurso ' + c.o + ' 2026');
+}
+function countdown(c, st) {
+  if (st === 'breve') { var n = days(TODAY, d(c.ini)); return { t: n === 1 ? 'Abre amanhã' : 'Abre em ' + n + ' dias', cls: 'blue' }; }
+  if (st === 'aberto' || st === 'ultimos') {
+    var m = days(TODAY, d(c.fim));
+    if (m === 0) return { t: 'Encerra hoje!', cls: 'red' };
+    if (m === 1) return { t: 'Encerra amanhã', cls: 'red' };
+    return { t: 'Faltam ' + m + ' dias', cls: m <= 5 ? 'red' : 'green' };
+  }
+  return null;
+}
+
+/* ---------- Conjunto ativo (próximos 6 meses) ---------- */
+DATA.forEach(function (c, i) { c.id = i; c.st = status(c); c.reg = regiaoDe(c.uf); });
+var ACTIVE = DATA.filter(function (c) {
+  if (c.st === 'encerrado') return false;
+  if (c.st === 'breve' && d(c.ini) > LIMIT) return false;
+  return true;
+});
+
+/* ---------- Estado dos filtros ---------- */
+var F = { status: '', banca: '' };
+
+function buildFilters() {
+  var reg = document.getElementById('fRegiao');
+  var html = '<option value="">Todo o Brasil</option><option value="BR">Nacionais (todo o país)</option>';
+  Object.keys(REGIOES).forEach(function (r) {
+    var ufs = REGIOES[r].filter(function (u) { return ACTIVE.some(function (c) { return c.uf === u; }); });
+    if (!ufs.length) return;
+    html += '<optgroup label="' + r + '"><option value="R:' + r + '">Toda a região ' + r + '</option>';
+    ufs.forEach(function (u) { html += '<option value="' + u + '">' + u + '</option>'; });
+    html += '</optgroup>';
+  });
+  reg.innerHTML = html;
+
+  var areas = {}; ACTIVE.forEach(function (c) { areas[c.area] = (areas[c.area] || 0) + 1; });
+  document.getElementById('fArea').innerHTML = '<option value="">Todas as áreas</option>' +
+    Object.keys(areas).sort().map(function (a) { return '<option value="' + esc(a) + '">' + esc(a) + ' (' + areas[a] + ')</option>'; }).join('');
+
+  ['fRegiao','fArea','fEsc','fEsf','fSal','fSort'].forEach(function (id) { document.getElementById(id).addEventListener('change', applyFilters); });
+  document.getElementById('q').addEventListener('input', debounce(applyFilters, 200));
+}
+
+function renderStatusChips() {
+  var counts = { '': ACTIVE.length, aberto: 0, ultimos: 0, breve: 0, previsto: 0 };
+  ACTIVE.forEach(function (c) { counts[c.st]++; if (c.st === 'ultimos') counts.aberto++; });
+  var opts = [['', 'Todos'], ['aberto', 'Abertas'], ['ultimos', 'Últimos dias'], ['breve', 'Em breve'], ['previsto', 'Previstos']];
+  document.getElementById('statusChips').innerHTML = opts.map(function (o) {
+    return '<button class="chip' + (F.status === o[0] ? ' on' : '') + '" onclick="setStatus(\'' + o[0] + '\')">' + o[1] + ' <span class="n">' + counts[o[0]] + '</span></button>';
+  }).join('');
+}
+
+function setStatus(s) { F.status = s; renderStatusChips(); applyFilters(); }
+function quick(t) { document.getElementById('q').value = t; applyFilters(); document.getElementById('lista').scrollIntoView(); }
+function quickUF(uf) { document.getElementById('fRegiao').value = uf; document.getElementById('q').value = ''; applyFilters(); document.getElementById('lista').scrollIntoView(); }
+function setBanca(b) { F.banca = (F.banca === b ? '' : b); applyFilters(); renderBancas(); document.getElementById('lista').scrollIntoView(); }
+function resetFilters() {
+  F.status = ''; F.banca = '';
+  ['fRegiao','fArea','fEsc','fEsf'].forEach(function (id) { document.getElementById(id).value = ''; });
+  document.getElementById('fSal').value = '0'; document.getElementById('q').value = '';
+  renderStatusChips(); renderBancas(); applyFilters();
+}
+function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+
+var SYN = { policia:['policial'], tribunal:['tribunais','trt','trf','judiciario'], tecnologia:['ti','informatica','sistemas','computacao'], fiscal:['fiscal','auditor','sefaz','tribut'], professor:['professor','educacao'] };
+
+function applyFilters() {
+  var q = norm(document.getElementById('q').value.trim());
+  var reg = document.getElementById('fRegiao').value;
+  var area = document.getElementById('fArea').value;
+  var escF = document.getElementById('fEsc').value;
+  var esf = document.getElementById('fEsf').value;
+  var sal = +document.getElementById('fSal').value;
+  var sort = document.getElementById('fSort').value;
+
+  var terms = q ? [q].concat(SYN[q] || []) : null;
+  var list = ACTIVE.filter(function (c) {
+    if (F.status === 'aberto' && !(c.st === 'aberto' || c.st === 'ultimos')) return false;
+    if (F.status && F.status !== 'aberto' && c.st !== F.status) return false;
+    if (F.banca && c.banca !== F.banca) return false;
+    if (reg) {
+      if (reg.indexOf('R:') === 0) { if (c.reg !== reg.slice(2)) return false; }
+      else if (c.uf !== reg) return false;
+    }
+    if (area && c.area !== area) return false;
+    if (escF && (c.esc || []).indexOf(escF) < 0) return false;
+    if (esf && c.esf !== esf) return false;
+    if (sal && !(c.sal >= sal)) return false;
+    if (terms) {
+      var hay = norm([c.o, c.cargos, c.banca, c.uf, c.area, c.esf].join(' '));
+      if (!terms.some(function (t) { return hay.indexOf(t) > -1; })) return false;
+    }
+    return true;
+  });
+
+  var ord = { ultimos: 0, aberto: 1, breve: 2, previsto: 3 };
+  list.sort(function (a, b) {
+    if (sort === 'salario') return (b.sal || 0) - (a.sal || 0);
+    if (sort === 'vagas') return totalVagas(b) - totalVagas(a);
+    if (sort === 'nome') return a.o.localeCompare(b.o, 'pt-BR');
+    var oa = ord[a.st], ob = ord[b.st];
+    if (oa !== ob) return oa - ob;
+    if (a.st === 'breve') return d(a.ini) - d(b.ini);
+    if (a.st === 'previsto') return totalVagas(b) - totalVagas(a);
+    return d(a.fim) - d(b.fim);
+  });
+
+  var tv = list.reduce(function (s, c) { return s + totalVagas(c); }, 0);
+  document.getElementById('resultsInfo').innerHTML = '<b>' + list.length + '</b> concurso' + (list.length !== 1 ? 's' : '') + ' encontrado' + (list.length !== 1 ? 's' : '') +
+    (tv ? ' · <b>' + tv.toLocaleString('pt-BR') + '</b> vagas informadas' : '') + (F.banca ? ' · banca <b>' + esc(F.banca) + '</b> <a href="#" onclick="setBanca(F.banca);return false">(remover)</a>' : '');
+  renderList(list);
+}
+
+function renderList(list) {
+  var el = document.getElementById('list');
+  if (!list.length) { el.innerHTML = '<div class="empty">Nenhum concurso encontrado com esses filtros.<br><br><button class="btn ghost" onclick="resetFilters()">Limpar filtros</button></div>'; return; }
+  el.innerHTML = list.map(function (c) {
+    var cd = countdown(c, c.st);
+    var dateLine = c.st === 'previsto' ? '<span class="date">' + esc(c.prev) + '</span>'
+      : c.st === 'breve' ? '<span class="date">Inscrições de <b>' + fmtD(c.ini) + '</b> a <b>' + fmtD(c.fim) + '</b></span>'
+      : '<span class="date">Inscrições até <b>' + fmtD(c.fim) + '</b></span>';
+    return '<div class="row st-' + c.st + '" onclick="openModal(' + c.id + ')" tabindex="0" onkeydown="if(event.key===\'Enter\')openModal(' + c.id + ')">' +
+      '<div class="band"></div>' +
+      '<div class="ufb"><span>' + c.uf + '</span></div>' +
+      '<div class="main">' +
+        '<h4>' + esc(c.o) + '</h4>' +
+        '<div class="meta">' + c.esf + ' · ' + esc(c.area) + (c.banca && c.banca !== 'Ver edital' ? ' · Banca ' + esc(c.banca) : '') + '</div>' +
+        (c.cargos ? '<div class="cargos">' + esc(c.cargos) + '</div>' : '') +
+        '<div class="tags">' +
+          '<span class="tag vagas">👥 ' + vagasTxt(c) + '</span>' +
+          (c.sal ? '<span class="tag money">💰 até ' + money(c.sal) + '</span>' : '') +
+          (c.esc ? '<span class="tag">🎓 ' + c.esc.map(function (e) { return ESC[e]; }).join(' / ') + '</span>' : '') +
+          (c.prova ? '<span class="tag">📝 Prova ' + fmtD(c.prova) + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="side">' +
+        '<span class="pill ' + c.st + '">' + ST_LABEL[c.st] + '</span>' + dateLine +
+        (cd ? '<span class="count ' + cd.cls + '">' + cd.t + '</span>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderStats() {
+  var abertos = ACTIVE.filter(function (c) { return c.st === 'aberto' || c.st === 'ultimos'; });
+  var vagas = ACTIVE.reduce(function (s, c) { return s + totalVagas(c); }, 0);
+  var maxSal = ACTIVE.reduce(function (m, c) { return c.sal > (m ? m.sal : 0) ? c : m; }, null);
+  var prev = ACTIVE.filter(function (c) { return c.st === 'previsto'; }).length;
+  var S = [
+    ['#e2f7ea', '#12a150', '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', abertos.length, 'com inscrições abertas'],
+    ['#fff1e3', '#ff7a00', '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', vagas.toLocaleString('pt-BR'), 'vagas informadas (inclui CR)'],
+    ['#e3efff', '#1d4e89', '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', moneyShort(maxSal && maxSal.sal), 'maior salário · ' + (maxSal ? maxSal.o.split(' —')[0] : '')],
+    ['#fff6d6', '#c98a00', '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>', prev, 'editais previstos / autorizados']
+  ];
+  document.getElementById('stats').innerHTML = S.map(function (s) {
+    return '<div class="stat"><div class="stat-ic" style="background:' + s[0] + '"><svg viewBox="0 0 24 24" fill="none" stroke="' + s[1] + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + s[2] + '</svg></div><div><b>' + s[3] + '</b><span>' + esc(s[4]) + '</span></div></div>';
+  }).join('');
+}
+
+function renderTicker() {
+  var soon = ACTIVE.filter(function (c) { return (c.st === 'aberto' || c.st === 'ultimos') && days(TODAY, d(c.fim)) <= 10; })
+    .sort(function (a, b) { return d(a.fim) - d(b.fim); });
+  if (!soon.length) { document.getElementById('ticker').style.display = 'none'; return; }
+  var html = soon.map(function (c) {
+    var n = days(TODAY, d(c.fim));
+    return '<span><b>' + esc(c.o) + '</b> — ' + (n === 0 ? 'encerra HOJE' : n === 1 ? 'encerra amanhã' : 'até ' + fmtD(c.fim).slice(0,5)) + '</span>';
+  }).join('');
+  document.getElementById('tickerInner').innerHTML = html;
+}
+
+function renderFeatured() {
+  var f = ACTIVE.filter(function (c) { return c.dest; });
+  document.getElementById('featured').innerHTML = f.slice(0, 4).map(function (c) {
+    var cd = countdown(c, c.st);
+    return '<div class="fcard" onclick="openModal(' + c.id + ')">' +
+      '<div class="fcard-top"><span class="uf">' + c.uf + '</span><h3>' + esc(c.o) + '</h3><small>' + c.esf + ' · ' + esc(c.banca || 'Banca a definir') + '</small></div>' +
+      '<div class="fcard-body">' +
+        '<div><span>Vagas</span><b>' + vagasTxt(c) + '</b></div>' +
+        '<div><span>Salário</span><b>' + (c.sal ? moneyShort(c.sal) : 'A definir') + '</b></div>' +
+        '<div class="full"><span class="pill ' + c.st + '">' + ST_LABEL[c.st] + '</span> ' +
+          (cd ? '<b class="count ' + cd.cls + '" style="font-size:12px;margin-left:6px">' + cd.t + '</b>' : '<small style="color:var(--text-sub);font-size:12px;margin-left:6px">' + esc(c.prev || '') + '</small>') +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function renderAgenda() {
+  var items = DATA.filter(function (c) { var p = d(c.prova); return p && p >= TODAY && p <= LIMIT; })
+    .sort(function (a, b) { return d(a.prova) - d(b.prova); });
+  var groups = {};
+  items.forEach(function (c) { var p = d(c.prova); var k = p.getFullYear() + '-' + ('0' + p.getMonth()).slice(-2); (groups[k] = groups[k] || []).push(c); });
+  var keys = Object.keys(groups).sort();
+  document.getElementById('agendaGrid').innerHTML = keys.length ? keys.map(function (k) {
+    var p = d(groups[k][0].prova);
+    return '<div class="month"><h3>' + MESES[p.getMonth()].replace(/^./, function (x) { return x.toUpperCase(); }) + ' ' + p.getFullYear() + '<span>' + groups[k].length + ' prova' + (groups[k].length > 1 ? 's' : '') + '</span></h3><ul>' +
+      groups[k].map(function (c) {
+        var pd = d(c.prova);
+        var click = c.enc ? 'window.open(\'' + link(c) + '\',\'_blank\')' : 'openModal(' + c.id + ')';
+        return '<li onclick="' + click + '"><div class="dbox"><b>' + pd.getDate() + '</b><small>' + MES3[pd.getMonth()] + '</small></div><div><div class="ag-t">' + esc(c.o) + '</div><div class="ag-s">' + c.uf + (c.banca && c.banca !== 'Ver edital' ? ' · ' + esc(c.banca) : '') + (c.obs ? ' · ' + esc(c.obs) : '') + (c.enc ? ' · inscrições encerradas' : '') + '</div></div></li>';
+      }).join('') + '</ul></div>';
+  }).join('') : '<div class="empty">Nenhuma prova marcada no período.</div>';
+}
+
+function renderBancas() {
+  var b = {}; ACTIVE.forEach(function (c) { if (c.banca && c.banca !== 'Ver edital') b[c.banca] = (b[c.banca] || 0) + 1; });
+  document.getElementById('bancaList').innerHTML = Object.keys(b).sort(function (x, y) { return b[y] - b[x] || x.localeCompare(y); }).map(function (k) {
+    return '<div class="banca" style="' + (F.banca === k ? 'border-color:var(--orange);background:var(--orange-100)' : '') + '" onclick="setBanca(\'' + k.replace(/'/g, "\\'") + '\')">' + esc(k) + ' <span>' + b[k] + '</span></div>';
+  }).join('');
+}
+
+/* ---------- Modal ---------- */
+function openModal(id) {
+  var c = DATA[id]; var cd = countdown(c, c.st);
+  var steps = [];
+  if (!c.prev) {
+    if (c.ini) steps.push({ l: 'Abertura', dt: c.ini });
+    steps.push({ l: 'Fim inscrições', dt: c.fim });
+    if (c.prova) steps.push({ l: 'Prova', dt: c.prova });
+  }
+  var tl = steps.length ? '<div class="timeline"><h4>Cronograma</h4><div class="tl">' + steps.map(function (s) {
+    var x = d(s.dt); var cls = x < TODAY ? 'done' : (days(TODAY, x) <= 7 ? 'now' : '');
+    return '<div class="' + cls + '"><b>' + fmtD(s.dt) + '</b><small>' + s.l + '</small></div>';
+  }).join('') + '</div></div>' : '';
+  var url = link(c);
+  var isSearch = url.indexOf('google.com/search') > -1;
+  document.getElementById('modal').innerHTML =
+    '<div class="modal-head"><button class="x" onclick="closeModal()" aria-label="Fechar">×</button>' +
+      '<h3>' + esc(c.o) + '</h3><p>' + c.esf + ' · ' + (c.uf === 'BR' ? 'Abrangência nacional' : c.uf + ' · Região ' + c.reg) + ' · ' + esc(c.area) + '</p>' +
+      '<span class="pill ' + c.st + '">' + ST_LABEL[c.st] + (cd ? ' · ' + cd.t : '') + '</span></div>' +
+    '<div class="modal-body"><div class="kv">' +
+      '<div><span>Vagas</span><b>' + vagasTxt(c) + '</b></div>' +
+      '<div><span>Remuneração</span><b>' + (c.salObs ? esc(c.salObs) : c.sal ? 'até ' + money(c.sal) : 'Consultar edital') + '</b></div>' +
+      '<div><span>Escolaridade</span><b>' + (c.esc ? c.esc.map(function (e) { return ESC[e]; }).join(', ') : '—') + '</b></div>' +
+      '<div><span>Banca</span><b>' + esc(c.banca || 'A definir') + '</b></div>' +
+      (c.taxa ? '<div><span>Taxa de inscrição</span><b>' + esc(c.taxa) + '</b></div>' : '') +
+      (c.prev ? '<div><span>Situação</span><b>' + esc(c.prev) + '</b></div>' : '<div><span>Inscrições</span><b>' + (c.ini ? fmtD(c.ini) + ' a ' : 'até ') + fmtD(c.fim) + '</b></div>') +
+      (c.cargos ? '<div class="full"><span>Cargos</span><b>' + esc(c.cargos) + '</b></div>' : '') +
+    '</div>' + tl +
+    '<div class="modal-actions"><a class="btn primary" href="' + url + '" target="_blank" rel="noopener">' + (isSearch ? '🔎 Buscar edital oficial' : '↗ Site da banca / inscrições') + '</a>' +
+      '<button class="btn ghost" onclick="copyInfo(' + id + ')">📋 Copiar resumo</button></div>' +
+    '<div class="note">Dados reunidos em 06/10/2026 a partir de editais e portais de concursos. Prazos podem ser prorrogados ou retificados — confirme sempre no edital oficial.</div>' +
+    '</div>';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function copyInfo(id) {
+  var c = DATA[id];
+  var t = '📢 ' + c.o + ' (' + c.uf + ')\n' + 'Situação: ' + ST_LABEL[c.st] + '\n' + 'Vagas: ' + vagasTxt(c) + '\n' +
+    (c.sal ? 'Salário: até ' + money(c.sal) + '\n' : '') +
+    (c.prev ? 'Previsão: ' + c.prev + '\n' : 'Inscrições: ' + (c.ini ? fmtD(c.ini) + ' a ' : 'até ') + fmtD(c.fim) + '\n') +
+    (c.prova ? 'Prova: ' + fmtD(c.prova) + '\n' : '') + (c.banca ? 'Banca: ' + c.banca + '\n' : '') + 'Mais: ' + link(c);
+  if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { alert('Resumo copiado!'); }, function () { prompt('Copie o resumo:', t); });
+  else prompt('Copie o resumo:', t);
+}
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+/* ---------- Inicialização ---------- */
+buildFilters();
+renderStatusChips();
+renderStats();
+renderTicker();
+renderFeatured();
+renderAgenda();
+renderBancas();
+applyFilters();
+</script>
+</body>
+</html>
